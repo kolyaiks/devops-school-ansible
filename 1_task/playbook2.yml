@@ -1,0 +1,16 @@
+---
+- name: Uninstall Apache
+  hosts: centos
+  become: true
+
+
+  tasks:
+    - name: Uninstall Apache
+      yum: name=httpd state=removed
+
+    - name: Delete index file
+      file: dest=/var/www/html/index.html state=absent
+
+    - name: Close FW
+      firewalld: port=80/tcp permanent=true state=disabled immediate=yes
+

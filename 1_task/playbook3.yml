@@ -1,0 +1,25 @@
+---
+- name: Update grub
+  hosts: centos 
+  become: true
+
+
+  tasks:
+   - name: Get line from file and modify it
+     shell: echo $(cat /etc/default/grub | grep GRUB_CMDLINE_LINUX)  | sed 's/="/="net.ifnames=0 biosdevname=0 /'
+     register: string_value
+
+   - name: Print new string value
+     debug: 
+       var: string_value.stdout
+
+   - name: Update line in file with new value
+     lineinfile: 
+       path: /etc/default/grub
+       regexp: '^GRUB_CMDLINE_LINUX'
+       line: "{{  string_value.stdout  }}"
+
+   - name: Apply changes to grub
+     shell: grub2-mkconfig -o /etc/default/grub 
+     when: string_value.stdout != ""  
+    
