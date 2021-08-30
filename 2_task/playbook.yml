@@ -38,4 +38,5 @@
         comment: "{{ item.username  }}@example.com"
         home: "/home/{{ item.username  }}-user"
         password: "{{ item.password | password_hash('sha512')}}"
+        update_password: on_create
       loop: "{{  users  }}"
