@@ -1,0 +1,21 @@
+---
+# tasks file for install_firewalld_role
+#
+- name: Install firewalld
+  yum: 
+    name: firewalld
+    state: installed
+
+- name: Start firewalld
+  service: 
+    name: firewalld 
+    state: started 
+    enabled: yes
+
+- name: Open FW
+  firewalld: 
+    port: "{{ item  }}/tcp" 
+    permanent: true 
+    state: enabled 
+    immediate: yes
+  loop: "{{  ports_to_open  }}" 

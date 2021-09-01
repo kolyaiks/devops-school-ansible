@@ -1,0 +1,5 @@
+---
+# defaults file for install_vsftpd_role
+
+anon_root: /var/ftp/pub 
+vsftpd_conf_path: /etc/vsftpd/vsftpd.conf

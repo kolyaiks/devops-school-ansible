@@ -1,0 +1,54 @@
+---
+# tasks file for install_vsftpd_role
+
+- name: Install vsftpd
+  yum:
+    name: vsftpd
+    state: latest
+
+- name: Install SELinux related packages
+  yum:
+    name: "{{ item  }}"
+    state: latest
+  loop:
+    - libselinux-python
+    - libsemanage-python
+
+- name: Enable SELinux
+  selinux:
+    policy: targeted
+    state: enforcing
+  register: launch_se_result
+
+- debug:
+    var: launch_se_result
+
+- name: Reboot host
+  reboot:
+  when: launch_se_result.reboot_required == true
+
+- name: Set SELinux parameter to enable anonymous upload
+  seboolean:
+    name: ftpd_anon_write
+    state: on
+    persistent: yes
+
+- name: Make dir for public upload
+  file:
+    state: directory
+    path: "{{ anon_root  }}/upload"
+    mode: '0777'
+    setype: public_content_rw_t
+
+- name: Config vsftpd
+  template:
+    src: config_template.j2
+    dest: "{{  vsftpd_conf_path  }}"
+  notify: Restart vfstpd
+
+- name: Launch vsftpd
+  service:
+    name: vsftpd
+    state: started
+    enabled: yes
+  

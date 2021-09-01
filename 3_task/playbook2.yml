@@ -1,0 +1,14 @@
+---
+- name: Install FTP server and configure firewall
+  hosts: centos
+  become: yes
+
+  vars:
+    ports_to_open:
+      - 10090-10100 # to use these ports in ftp passive mode
+      - 21
+      - 22
+
+  roles: 
+    - install_firewalld_role 
+    - install_vsftpd_role

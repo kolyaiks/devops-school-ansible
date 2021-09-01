@@ -1,0 +1,12 @@
+listen=yes
+anonymous_enable=yes
+no_anon_password=yes
+write_enable=yes
+anon_upload_enable=yes
+anon_mkdir_write_enable=yes
+anon_other_write_enable=yes
+anon_root={{  anon_root  }}
+pasv_enable=yes
+pasv_max_port={{  ports_to_open[0].split('-')[1] }}
+pasv_min_port={{  ports_to_open[0].split('-')[0] }}
+

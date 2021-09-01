@@ -1,0 +1,14 @@
+---
+- name: Install Apache and Firewalld
+  hosts: centos
+  become: yes
+ 
+  vars:
+    ports_to_open:
+      - 80
+      - 443
+      - 22
+
+  roles:
+    - role: install_apache_role
+    - role: install_firewalld_role

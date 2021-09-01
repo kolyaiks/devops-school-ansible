@@ -1,0 +1,7 @@
+---
+# handlers file for install_apache_role
+
+- name: Restart Apache
+  service:
+    name: "{{  apache_name  }}"
+    state: restarted
